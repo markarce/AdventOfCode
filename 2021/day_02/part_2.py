@@ -59,7 +59,7 @@ def find_depth(filename):
     depth = 0
     aim = 0
     instructions = []
-    with open(filename) as f: # "~/AdventOfCode/2021/day_01/sonar_sweep.txt"
+    with open(filename) as f:
         lines = f.readlines()
         for line in lines:
             instructions.append(line)

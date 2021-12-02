@@ -32,11 +32,8 @@ Calculate the horizontal position and depth you would have after following the p
 def find_depth(filename):
     horizontal = 0
     depth = 0
-    instructions = []
-    with open(filename) as f: # "~/AdventOfCode/2021/day_01/sonar_sweep.txt"
-        lines = f.readlines()
-        for line in lines:
-            instructions.append(line)
+    with open(filename) as f:
+        instructions = f.readlines()
 
     for instruction in instructions:
         movement, value = instruction.split(" ")
