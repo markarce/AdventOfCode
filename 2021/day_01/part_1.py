@@ -45,7 +45,7 @@ How many measurements are larger than the previous measurement?
 
 def find_measurements(filename):
     measurements = []
-    with open(filename) as f: # "~/AdventOfCode/2021/day_01/sonar_sweep.txt"
+    with open(filename) as f:
         lines = f.readlines()
         for line in lines:
             measurements.append(int(line))
