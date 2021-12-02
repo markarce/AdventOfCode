@@ -46,4 +46,4 @@ def find_depth(filename):
 
     print(horizontal * depth)
 
-find_depth("/Users/marce/AdventOfCode/2021/day_02/instructions.txt")
+find_depth("instructions.txt")

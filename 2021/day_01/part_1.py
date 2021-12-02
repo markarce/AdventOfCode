@@ -60,4 +60,4 @@ def find_measurements(filename):
 
     print(count)
 
-find_measurements("/Users/marce/AdventOfCode/2021/day_01/sonar_sweep.txt")
+find_measurements("sonar_sweep.txt")
