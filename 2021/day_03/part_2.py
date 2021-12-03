@@ -28,67 +28,62 @@ Finally, to find the life support rating, multiply the oxygen generator rating (
 
 Use the binary numbers in your diagnostic report to calculate the oxygen generator rating and CO2 scrubber rating, then multiply them together. What is the life support rating of the submarine? (Be sure to represent your answer in decimal, not binary.)
 """
-
-def find_power_consumption(filename=None, new_binary_numbers=None, current_position=0):
+def verify_life_support_rating(filename):
+    """Keep only numbers selected by the bit criteria for the type of
+    rating value for which you are searching. Discard numbers which do not match the bit criteria.
+    If you only have one number left, stop; this is the rating value for which you are searching.
+    Otherwise, repeat the process, considering the next bit to the right.
+    """
     if filename:
         binary_numbers = []
         with open(filename) as f:
             lines = f.readlines()
             for line in lines:
-                binary_numbers.append(line)
-    if not filename:
-        binary_numbers = new_binary_numbers
+                binary_numbers.append(line.strip())
 
-    gamma_rate_count = [0] * len(binary_numbers[0])
 
-    for number in binary_numbers:
-        for i in range(0, len(number) - 1):
-            gamma_rate_count[i] += int(number[i])
-
-    gamma_rate = []
-    epsilon_rate = []
-    for count in gamma_rate_count:
-        if int(count) / len(binary_numbers) > .5:
-            gamma_rate.append("1")
-            epsilon_rate.append("0")
+    def find_oxygen_generator_rating(binary_numbers, current_position=0):
+        count = 0
+        result = []
+        if len(binary_numbers) == 1:
+            return int(binary_numbers[0], 2)
+        for number in binary_numbers:
+            if number[current_position] == "1":
+                count += 1
+        if count / len(binary_numbers) >= .5:
+            target = "1"
         else:
-            gamma_rate.append("0")
-            epsilon_rate.append("1")
+            target = "0"
 
-    gamma_rate = "".join(gamma_rate)
-    epsilon_rate = "".join(epsilon_rate)
+        for number in binary_numbers:
+            if number[current_position] == target:
+                result.append(number)
+        return find_oxygen_generator_rating(result, current_position=current_position + 1)
 
-    print(f"gamma_rate: {gamma_rate}")
-    print(f"epsilon_rate: {epsilon_rate}")
-
-    return binary_numbers, gamma_rate, epsilon_rate, current_position
-
-def find_oxygen_generator_rating(binary_numbers=None, current_position=0):
-    print(f"current_position: {current_position}")
-    if not binary_numbers:
-        binary_numbers, gamma_rate, epsilon_rate, current_position = find_power_consumption(filename="sample_data.txt")
-
-    oxygen_numbers = binary_numbers[:]
-    for i in range(current_position, len(gamma_rate)):
-        count = len(oxygen_numbers)
-        print(count)
-        print(oxygen_numbers)
-        for number in range(0, count):
-            if oxygen_numbers[number][i] == gamma_rate[i]:
-                oxygen_numbers.append(oxygen_numbers[number])
-        oxygen_numbers = oxygen_numbers[count:]
-        print(f"new oxygen_numbers: {oxygen_numbers}")
-        if len(oxygen_numbers) == 1:
-            print(oxygen_numbers)
-            return
+    def find_CO2_scrubber_rating(binary_numbers, current_position=0):
+        """To find CO2 scrubber rating, determine the least common value (0 or 1) in the current
+        bit position, and keep only numbers with that bit in that position. If 0 and 1 are equally
+        common, keep values with a 0 in the position being considered."""
+        count = 0
+        result = []
+        if len(binary_numbers) == 1:
+            return int(binary_numbers[0], 2)
+        for number in binary_numbers:
+            if number[current_position] == "1":
+                count += 1
+        if count / len(binary_numbers) < .5:
+            target = "1"
         else:
-            find_power_consumption(new_binary_numbers=oxygen_numbers, current_position=current_position + 1)
+            target = "0"
 
-    # print(gamma_rate_count)
-    # print(gamma_rate)
-    # print(int(gamma_rate, 2))
-    # print(int(epsilon_rate, 2))
+        for number in binary_numbers:
+            if number[current_position] == target:
+                result.append(number)
+        return find_CO2_scrubber_rating(result, current_position=current_position + 1)
 
-    # print(int(gamma_rate, 2) * int(epsilon_rate, 2))
+    return find_oxygen_generator_rating(binary_numbers) * find_CO2_scrubber_rating(binary_numbers)
 
-find_oxygen_generator_rating()
+
+
+
+print(verify_life_support_rating("data.txt"))
