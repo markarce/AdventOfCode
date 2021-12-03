@@ -29,11 +29,6 @@ Finally, to find the life support rating, multiply the oxygen generator rating (
 Use the binary numbers in your diagnostic report to calculate the oxygen generator rating and CO2 scrubber rating, then multiply them together. What is the life support rating of the submarine? (Be sure to represent your answer in decimal, not binary.)
 """
 def verify_life_support_rating(filename):
-    """Keep only numbers selected by the bit criteria for the type of
-    rating value for which you are searching. Discard numbers which do not match the bit criteria.
-    If you only have one number left, stop; this is the rating value for which you are searching.
-    Otherwise, repeat the process, considering the next bit to the right.
-    """
     if filename:
         binary_numbers = []
         with open(filename) as f:
@@ -60,10 +55,8 @@ def verify_life_support_rating(filename):
                 result.append(number)
         return find_oxygen_generator_rating(result, current_position=current_position + 1)
 
+
     def find_CO2_scrubber_rating(binary_numbers, current_position=0):
-        """To find CO2 scrubber rating, determine the least common value (0 or 1) in the current
-        bit position, and keep only numbers with that bit in that position. If 0 and 1 are equally
-        common, keep values with a 0 in the position being considered."""
         count = 0
         result = []
         if len(binary_numbers) == 1:
@@ -81,9 +74,7 @@ def verify_life_support_rating(filename):
                 result.append(number)
         return find_CO2_scrubber_rating(result, current_position=current_position + 1)
 
+
     return find_oxygen_generator_rating(binary_numbers) * find_CO2_scrubber_rating(binary_numbers)
-
-
-
 
 print(verify_life_support_rating("data.txt"))
