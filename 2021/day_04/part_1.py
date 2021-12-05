@@ -54,34 +54,12 @@ The score of the winning board can now be calculated. Start by finding the sum o
 To guarantee victory against the giant squid, figure out which board will win first. What will your final score be if you choose that board?
 """
 
-    # card = [[22, 13, 17, 11, 0], 
-    #         [8, 2, 23, 4, 24], 
-    #         [21, 9, 14, 16, 7], 
-    #         [6, 10, 3, 18, 5], 
-    #         [1, 12, 20, 15, 19]
-    #         ]
 
-    # card1 = [["x", "x", "x", "x", "x"], 
-    #         [8, 2, 23, 4, 24], 
-    #         [21, 9, 14, 16, 7], 
-    #         [6, 10, 3, 18, 5], 
-    #         [1, 12, 20, 15, 19]
-    #         ]
-
-    # card2 = [["x", 13, 17, 11, 0], 
-    #         ["x", 2, 23, 4, 24], 
-    #         ["x", 9, 14, 16, 7], 
-    #         ["x", 10, 3, 18, 5], 
-    #         ["x", 12, 20, 15, 19]
-    #         ]
-
-def boilerplate(filename):
+def find_first_bingo_score(filename):
     with open(filename) as f:
         lines = [ line.strip() for line in f ]
 
-    print(f"lines: {lines}")
     numbers = [int(element) for element in lines[0].split(",")]
-    print(f"numbers: {numbers}")
     cards = []
     new_card = []
     for i in range (2, len(lines)):
@@ -90,12 +68,9 @@ def boilerplate(filename):
             for j in range(0, len(new_line)):
                 new_line[j] = int(new_line[j])
             new_card.append(new_line)
-            # print(new_card)
             if len(new_card) == 5:
                 cards.append(new_card)
                 new_card = []
-
-    print(cards)
 
     def mark_numbers(called_number, cards):
         for i in range(0, len(cards)):
@@ -105,17 +80,23 @@ def boilerplate(filename):
                         cards[i][j][k] = "x"
                         if is_bingo(cards[i], j, k):
                             print("BINGO!")
-                            print(cards[i])
                             return cards[i]
 
-    def is_bingo(card, row, column):
-        for number in card[row]:
-            if type(number) == int:
-                return False
-        for element in card:
-            if element[column] == int:
-                return False
-        return True
+    def is_bingo(card, row_index, column_index):
+        bingo_count = 0
+        for number in card[row_index]:
+            if type(number) == str:
+                bingo_count += 1
+                if bingo_count == 5:
+                    return True
+
+        bingo_count = 0
+        for row in card:
+            if type(row[column_index]) == str:
+                bingo_count += 1
+                if bingo_count == 5:
+                    return True
+        return False
 
     def card_sum(card):
         result = 0
@@ -126,13 +107,12 @@ def boilerplate(filename):
         return result
 
     for number in numbers:
-        print(f"current_number: {number}")
         winning_card = mark_numbers(number, cards)
         if winning_card:
             print(f"winning_card: {winning_card}")
+            print(f"card_sum: {card_sum(winning_card)}")
             print(card_sum(winning_card) * number)
             break
-            
-    print(winning_card)
 
-boilerplate("sample_data.txt")
+
+find_first_bingo_score("data.txt")
