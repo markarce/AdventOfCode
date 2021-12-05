@@ -74,11 +74,12 @@ def find_final_bingo_score(filename):
     with open(filename) as f:
         lines = [line.strip() for line in f]
 
+    # transform input into usable data
     numbers = [int(number) for number in lines[0].split(",")]
     cards = []
     new_card = []
     for i in range (2, len(lines)):
-        if lines[i] != "":
+        if lines[i]:
             new_line = " ".join(lines[i].split()).split(" ")
             for j in range(0, len(new_line)):
                 new_line[j] = int(new_line[j])
@@ -87,19 +88,21 @@ def find_final_bingo_score(filename):
                 cards.append(new_card)
                 new_card = []
 
+
     def mark_numbers(called_number, cards):
+        # marks a number as called, then calls is_bingo to check if the called number results in a bingo
         bingo_indices = []
-        for i in range(0, len(cards)):
-            for j in range(0, len(cards[i])):
-                for k in range(0, len(cards[i][j])):
-                    if cards[i][j][k] == called_number:
-                        cards[i][j][k] = "x"
-                        if is_bingo(cards[i], j, k):
-                            print("BINGO")
-                            bingo_indices.append(i)
+        for card_index in range(0, len(cards)):
+            for row_index in range(0, len(cards[card_index])):
+                for num_index in range(0, len(cards[card_index][row_index])):
+                    if cards[card_index][row_index][num_index] == called_number:
+                        cards[card_index][row_index][num_index] = str(cards[card_index][row_index][num_index])
+                        if is_bingo(cards[card_index], row_index, num_index):
+                            bingo_indices.append(card_index)
         return bingo_indices
 
     def is_bingo(card, row_index, column_index):
+        # determine if a card has a vertical or horizontal bingo
         bingo_count = 0
         for number in card[row_index]:
             if type(number) == str:
@@ -116,6 +119,7 @@ def find_final_bingo_score(filename):
         return False
 
     def card_sum(card):
+        # return the sum of all non-marked numbers on a bingo card
         result = 0
         for row in card:
             for number in row:
@@ -123,6 +127,8 @@ def find_final_bingo_score(filename):
                     result += number
         return result
 
+
+    # run through the list of numbers, check for bingos, and store bingo data in cards_that_have_won
     cards_that_have_won = {}
     winning_order = 1
 
@@ -131,15 +137,13 @@ def find_final_bingo_score(filename):
         if indeces:
             for index in indeces:
                 if index not in cards_that_have_won.keys():
-                    print("adding card to winning_cards")
                     winning_card = copy.deepcopy(cards[index])
                     cards_that_have_won[index] = {"winning_order": winning_order, "number": number, "winning_card": winning_card}
                     winning_order += 1
 
     last_winning_card_index = list(cards_that_have_won)[-1]
     last_winning_card = cards_that_have_won[last_winning_card_index]["winning_card"]
-    last_winning_card_number = cards_that_have_won[last_winning_card_index]["number"]
-    print(f"winning cards: {cards_that_have_won}")
-    print(f"last winning card's final score: {card_sum(last_winning_card) * last_winning_card_number}")
+    last_bingo_number = cards_that_have_won[last_winning_card_index]["number"]
+    print(f"last winning card's final score: {card_sum(last_winning_card) * last_bingo_number}")
 
 find_final_bingo_score("data.txt")
