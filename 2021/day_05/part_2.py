@@ -76,28 +76,27 @@ def find_double_overlaps(filename):
 
     overlaps = {}
     
-    for line in line_list: # 2,2 -> 2,1
-        start = line[0] # 2,2
-        end = line[1] # 2,1
+    for line in line_list:
+        start = line[0]
+        end = line[1]
 
         # check if vertical
-        if start[0] == end[0]: # true
-            low = min(start[1], end[1]) # 1
-            high = max(start[1], end[1]) # 2
+        if start[0] == end[0]:
+            low = min(start[1], end[1])
+            high = max(start[1], end[1])
             for i in range(low, high + 1):
                 point = f"{start[0]},{i}"
                 overlaps[point] = overlaps.get(point, 0) + 1
 
         # check if horizontal
         elif start[1] == end[1]:
-            low = min(start[0], end[0]) # 1
-            high = max(start[0], end[0]) # 2
+            low = min(start[0], end[0])
+            high = max(start[0], end[0])
             for i in range(low, high + 1):
                 point = f"{i},{start[1]}"
                 overlaps[point] = overlaps.get(point, 0) + 1
 
         # we know it's diagonal
-        # possible combinations: [9,7], [7,9] ... [1,1], [3,3] ... 
         else:
             # order the starting and ending points with the leftmost point on the x-axis
             if start[0] > end[0]:
@@ -108,8 +107,7 @@ def find_double_overlaps(filename):
             # determine if going up or down:
             if start[1] < end[1]:
                 # going up
-                for x in range(start[0], end[0] + 1): # 7, 9
-                    # for y in range(start[1], end[1] + 1): # 9, 7
+                for x in range(start[0], end[0] + 1):
                     point = f"{x},{y}"
                     overlaps[point] = overlaps.get(point, 0) + 1
                     y += 1
@@ -117,7 +115,6 @@ def find_double_overlaps(filename):
             else:
                 # going down
                 for x in range(start[0], end[0] + 1):
-                    # for y in range(start[1], end[1] - 1, -1):
                     point = f"{x},{y}"
                     overlaps[point] = overlaps.get(point, 0) + 1
                     y -= 1
