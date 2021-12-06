@@ -51,7 +51,6 @@ def find_double_overlaps(filename):
             if start[0] == end[0] or start[1] == end[1]:
                 line_list.append([start, end])
 
-    print(line_list)
     overlaps = {}
     
     for line in line_list: # 2,2 -> 2,1

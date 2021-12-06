@@ -67,17 +67,13 @@ Consider all of the lines. At how many points do at least two lines overlap?
 
 def find_double_overlaps(filename):
     with open(filename) as f:
-        lines = f.readlines()
-
-    with open(filename) as file:
         line_list = []
-        for line in file:
+        for line in f:
             start, end = line.split(" -> ")
             start = [int(num) for num in start.split(",")]
             end = [int(num) for num in end.split(",")]
             line_list.append([start, end])
 
-    print(line_list)
     overlaps = {}
     
     for line in line_list: # 2,2 -> 2,1
@@ -105,7 +101,6 @@ def find_double_overlaps(filename):
         else:
             # order the starting and ending points with the leftmost point on the x-axis
             if start[0] > end[0]:
-                print("reordered points")
                 start, end = end, start
 
             y = start[1]
@@ -113,21 +108,17 @@ def find_double_overlaps(filename):
             # determine if going up or down:
             if start[1] < end[1]:
                 # going up
-                print("going up")
                 for x in range(start[0], end[0] + 1): # 7, 9
                     # for y in range(start[1], end[1] + 1): # 9, 7
                     point = f"{x},{y}"
-                    print(f"up point: {point}")
                     overlaps[point] = overlaps.get(point, 0) + 1
                     y += 1
 
             else:
                 # going down
-                print("going down")
                 for x in range(start[0], end[0] + 1):
                     # for y in range(start[1], end[1] - 1, -1):
                     point = f"{x},{y}"
-                    print(f"down point: {point}")
                     overlaps[point] = overlaps.get(point, 0) + 1
                     y -= 1
 
@@ -136,7 +127,6 @@ def find_double_overlaps(filename):
         if overlaps[key] > 1:
             count += 1
 
-    print(overlaps)
     print(count)
 
 find_double_overlaps("data.txt")
