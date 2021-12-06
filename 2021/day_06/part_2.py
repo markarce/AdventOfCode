@@ -60,7 +60,7 @@ How many lanternfish would there be after 256 days?
 Your puzzle answer was 1695929023803.
 """
 
-def count_laternfish(filename):
+def count_lanternfish(filename):
     with open(filename) as f:
         fishes = [int(fish) for fish in f.read().split(",")]
 
@@ -79,4 +79,4 @@ def count_laternfish(filename):
 
     print(sum(fish_list))
 
-count_laternfish("data.txt")
+count_lanternfish("data.txt")
