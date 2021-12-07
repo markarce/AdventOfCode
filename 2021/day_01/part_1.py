@@ -40,15 +40,14 @@ To do this, count the number of times a depth measurement increases from the pre
 In this example, there are 7 measurements that are larger than the previous measurement.
 
 How many measurements are larger than the previous measurement?
+
+Your answer: 1581
 """
 
 
 def find_measurements(filename):
-    measurements = []
     with open(filename) as f:
-        lines = f.readlines()
-        for line in lines:
-            measurements.append(int(line))
+        measurements = [int(line) for line in f.readlines()]    
 
     current = measurements[0]
     count = 0
