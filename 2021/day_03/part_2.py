@@ -27,14 +27,12 @@ As there is only one number left, stop; the CO2 scrubber rating is 01010, or 10 
 Finally, to find the life support rating, multiply the oxygen generator rating (23) by the CO2 scrubber rating (10) to get 230.
 
 Use the binary numbers in your diagnostic report to calculate the oxygen generator rating and CO2 scrubber rating, then multiply them together. What is the life support rating of the submarine? (Be sure to represent your answer in decimal, not binary.)
+
+Your puzzle answer was 1662846.
 """
 def verify_life_support_rating(filename):
-    if filename:
-        binary_numbers = []
-        with open(filename) as f:
-            lines = f.readlines()
-            for line in lines:
-                binary_numbers.append(line.strip())
+    with open(filename) as f:
+        binary_numbers = f.read().splitlines()
 
 
     def find_oxygen_generator_rating(binary_numbers, current_position=0):
