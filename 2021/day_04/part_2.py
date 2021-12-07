@@ -78,11 +78,12 @@ def find_final_bingo_score(filename):
     numbers = [int(number) for number in lines[0].split(",")]
     cards = []
     new_card = []
-    for i in range (2, len(lines)):
-        if lines[i]:
-            new_line = " ".join(lines[i].split()).split(" ")
-            for j in range(0, len(new_line)):
-                new_line[j] = int(new_line[j])
+    for row_index in range (2, len(lines)):
+        if lines[row_index]:
+            new_line = " ".join(lines[row_index].split()).split(" ")
+            new_line = [int(num) for num in new_line]
+            # for num_index in range(0, len(new_line)):
+            #     new_line[num_index] = int(new_line[num_index])
             new_card.append(new_line)
             if len(new_card) == 5:
                 cards.append(new_card)
@@ -127,10 +128,9 @@ def find_final_bingo_score(filename):
                     result += number
         return result
 
-
     # run through the list of numbers, check for bingos, and store bingo data in cards_that_have_won
     cards_that_have_won = {}
-    winning_order = 1
+    win_ranking = 1
 
     for number in numbers:
         indeces = mark_numbers(number, cards)
@@ -138,8 +138,8 @@ def find_final_bingo_score(filename):
             for index in indeces:
                 if index not in cards_that_have_won.keys():
                     winning_card = copy.deepcopy(cards[index])
-                    cards_that_have_won[index] = {"winning_order": winning_order, "number": number, "winning_card": winning_card}
-                    winning_order += 1
+                    cards_that_have_won[index] = {"win_ranking": win_ranking, "number": number, "winning_card": winning_card}
+                    win_ranking += 1
 
     last_winning_card_index = list(cards_that_have_won)[-1]
     last_winning_card = cards_that_have_won[last_winning_card_index]["winning_card"]

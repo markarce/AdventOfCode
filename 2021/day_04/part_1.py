@@ -57,9 +57,9 @@ To guarantee victory against the giant squid, figure out which board will win fi
 
 def find_first_bingo_score(filename):
     with open(filename) as f:
-        lines = [ line.strip() for line in f ]
+        lines = [line.strip() for line in f]
 
-    numbers = [int(element) for element in lines[0].split(",")]
+    numbers = [int(num) for num in lines[0].split(",")]
     cards = []
     new_card = []
     for i in range (2, len(lines)):
@@ -73,14 +73,13 @@ def find_first_bingo_score(filename):
                 new_card = []
 
     def mark_numbers(called_number, cards):
-        for i in range(0, len(cards)):
-            for j in range(0, len(cards[i])):
-                for k in range(0, len(cards[i][j])):
-                    if cards[i][j][k] == called_number:
-                        cards[i][j][k] = "x"
-                        if is_bingo(cards[i], j, k):
-                            print("BINGO!")
-                            return cards[i]
+        for card_index in range(0, len(cards)):
+            for row_index in range(0, len(cards[card_index])):
+                for num_index in range(0, len(cards[card_index][row_index])):
+                    if cards[card_index][row_index][num_index] == called_number:
+                        cards[card_index][row_index][num_index] = str(cards[card_index][row_index][num_index])
+                        if is_bingo(cards[card_index], row_index, num_index):
+                            return cards[card_index]
 
     def is_bingo(card, row_index, column_index):
         bingo_count = 0
@@ -109,8 +108,6 @@ def find_first_bingo_score(filename):
     for number in numbers:
         winning_card = mark_numbers(number, cards)
         if winning_card:
-            print(f"winning_card: {winning_card}")
-            print(f"card_sum: {card_sum(winning_card)}")
             print(card_sum(winning_card) * number)
             break
 
