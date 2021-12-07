@@ -81,11 +81,8 @@ Your puzzle answer was 1618.
 
 
 def find_measurements(filename):
-    measurements = []
     with open(filename) as f:
-        lines = f.readlines()
-        for line in lines:
-            measurements.append(int(line))
+        measurements = [int(line) for line in f.readlines()]
 
     current = sum(measurements[0:3])
     count = 0

@@ -41,13 +41,13 @@ In this example, there are 7 measurements that are larger than the previous meas
 
 How many measurements are larger than the previous measurement?
 
-Your answer: 1581
+Your puzzle answer was 1581.
 """
 
 
 def find_measurements(filename):
     with open(filename) as f:
-        measurements = [int(line) for line in f.readlines()]    
+        measurements = [int(line) for line in f.readlines()]
 
     current = measurements[0]
     count = 0
