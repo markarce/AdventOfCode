@@ -128,21 +128,12 @@ def sum_all_output_values(filename):
     output_value_sum = 0
     for line in lines:
         signal_pattern, output_value = set(line.split(" | ")[0].split(" ")), line.split(" | ")[1].split(" ")
-        decoded_numbers = {
-            0: None,
-            1: None,
-            2: None,
-            3: None,
-            4: None,
-            5: None,
-            6: None,
-            7: None,
-            8: None,
-            9: None,
-        }
+        decoded_numbers = {}
+        for i in range(0, 10):
+            decoded_numbers[i] = None
 
-        six_width = {word for word in signal_pattern if len(word) == 6}
-        five_width = {word for word in signal_pattern if len(word) == 5}
+        five_width = {digit for digit in signal_pattern if len(digit) == 5}
+        six_width = {digit for digit in signal_pattern if len(digit) == 6}
         for digit in signal_pattern:
             if len(digit) == 2:
                 decoded_numbers[1] = digit
@@ -161,7 +152,6 @@ def sum_all_output_values(filename):
         decoded_numbers[2] = min(five_width.difference([decoded_numbers[5], decoded_numbers[3]]))
 
         code_to_value = {key: value for value, key in decoded_numbers.items()}
-
         current_value = []
 
         for digit in output_value:
