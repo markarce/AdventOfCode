@@ -132,8 +132,8 @@ def sum_all_output_values(filename):
         for i in range(0, 10):
             decoded_numbers[i] = None
 
-        five_width = {digit for digit in signal_pattern if len(digit) == 5}
-        six_width = {digit for digit in signal_pattern if len(digit) == 6}
+        five_segment_digits = {digit for digit in signal_pattern if len(digit) == 5}
+        six_segment_digits = {digit for digit in signal_pattern if len(digit) == 6}
         for digit in signal_pattern:
             if len(digit) == 2:
                 decoded_numbers[1] = digit
@@ -144,12 +144,12 @@ def sum_all_output_values(filename):
             if len(digit) == 7:
                 decoded_numbers[8] = digit
 
-        decoded_numbers[3] = min({digit for digit in five_width if set(decoded_numbers[7]).issubset(digit)})
-        decoded_numbers[9] = min({digit for digit in six_width if set(decoded_numbers[3]).issubset(digit)})
-        decoded_numbers[0] = min({digit for digit in six_width if set(decoded_numbers[1]).issubset(digit)}.difference([decoded_numbers[9]]))
-        decoded_numbers[6] = min(six_width.difference([decoded_numbers[9], decoded_numbers[0]]))
-        decoded_numbers[5] = min({digit for digit in five_width if set(digit).issubset(decoded_numbers[6])})
-        decoded_numbers[2] = min(five_width.difference([decoded_numbers[5], decoded_numbers[3]]))
+        decoded_numbers[3] = min({digit for digit in five_segment_digits if set(decoded_numbers[7]).issubset(digit)})
+        decoded_numbers[9] = min({digit for digit in six_segment_digits if set(decoded_numbers[3]).issubset(digit)})
+        decoded_numbers[0] = min({digit for digit in six_segment_digits if set(decoded_numbers[1]).issubset(digit)}.difference([decoded_numbers[9]]))
+        decoded_numbers[6] = min(six_segment_digits.difference([decoded_numbers[9], decoded_numbers[0]]))
+        decoded_numbers[5] = min({digit for digit in five_segment_digits if set(digit).issubset(decoded_numbers[6])})
+        decoded_numbers[2] = min(five_segment_digits.difference([decoded_numbers[5], decoded_numbers[3]]))
 
         code_to_value = {key: value for value, key in decoded_numbers.items()}
         current_value = []
