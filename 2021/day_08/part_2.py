@@ -129,7 +129,7 @@ def sum_all_output_values(filename):
     for line in lines:
         signal_pattern, output_value = set(line.split(" | ")[0].split(" ")), line.split(" | ")[1].split(" ")
         decoded_numbers = {}
-        for i in range(0, 10):
+        for i in range(10):
             decoded_numbers[i] = None
 
         five_segment_digits = {digit for digit in signal_pattern if len(digit) == 5}
