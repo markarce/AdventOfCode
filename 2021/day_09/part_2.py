@@ -65,10 +65,9 @@ What do you get if you multiply together the sizes of the three largest basins?
 
 """
 from functools import reduce
-    
+
 
 def multiply_sizes_of_three_largest_basins(filename):
-    pp = pprint.PrettyPrinter(indent=4)
     with open(filename) as f:
         lines = [[int(num) for num in line.rstrip()] for line in f.readlines()]
 
@@ -76,7 +75,6 @@ def multiply_sizes_of_three_largest_basins(filename):
 
     for i in range(0, len(lines)):
         for j in range(0, len(lines[i])):
-            print(lines[i][j])
             total = 0
             count = 0
 
@@ -98,7 +96,7 @@ def multiply_sizes_of_three_largest_basins(filename):
             if j < len(lines[i]) - 1:
                 # check right
                 total += 1
-                if lines[i][j] < lines [i][j + 1]:
+                if lines[i][j] < lines[i][j + 1]:
                     count += 1
             if count == total:
                 lowest_points.append([i, j])
@@ -112,16 +110,16 @@ def multiply_sizes_of_three_largest_basins(filename):
 
         if i > 0 and lines[i - 1][j] != 9:
             if f"{i - 1},{j}" not in basin.keys():
-                places_to_check.append((i - 1,j))
+                places_to_check.append((i - 1, j))
         if i < len(lines) - 1 and lines[i + 1][j] != 9:
             if f"{i + 1},{j}" not in basin.keys():
-                places_to_check.append((i + 1,j))
+                places_to_check.append((i + 1, j))
         if j > 0 and lines[i][j - 1] != 9:
             if f"{i},{j - 1}" not in basin.keys():
-                places_to_check.append((i,j - 1))
+                places_to_check.append((i, j - 1))
         if j < len(lines[0]) - 1 and lines[i][j + 1] != 9:
             if f"{i},{j + 1}" not in basin.keys():
-                places_to_check.append((i,j + 1))
+                places_to_check.append((i, j + 1))
         
         for place in places_to_check:
             get_basin_info(*place, basin)
@@ -136,6 +134,6 @@ def multiply_sizes_of_three_largest_basins(filename):
         basin_sizes.append(len(basin))
 
 
-    print(f"basin_sizes: {reduce(lambda x, y: x*y, sorted(basin_sizes)[:-4:-1])}")
+    print(f"basin_sizes: {reduce(lambda x, y: x * y, sorted(basin_sizes)[:-4:-1])}")
 
 multiply_sizes_of_three_largest_basins("data.txt")

@@ -21,10 +21,8 @@ The risk level of a low point is 1 plus its height. In the above example, the ri
 Find all of the low points on your heightmap. What is the sum of the risk levels of all low points on your heightmap?
 """
 
-import pprint
 
 def sum_risk_levels_of_low_points(filename):
-    pp = pprint.PrettyPrinter(indent=4)
     with open(filename) as f:
         lines = [[num for num in line.rstrip()] for line in f.readlines()]
 
@@ -60,8 +58,5 @@ def sum_risk_levels_of_low_points(filename):
                 lowest_points.append(int(lines[i][j]) + 1)
 
     print(sum(lowest_points))
-
-    # pp.pprint(lines)
-
 
 sum_risk_levels_of_low_points("data.txt")
