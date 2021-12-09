@@ -62,10 +62,7 @@ def verify_life_support_rating(filename):
         for number in binary_numbers:
             if number[current_position] == "1":
                 count += 1
-        if count / len(binary_numbers) < .5:
-            target = "1"
-        else:
-            target = "0"
+        target = "1" if count / len(binary_numbers) < .5 else "0"
 
         for number in binary_numbers:
             if number[current_position] == target:
