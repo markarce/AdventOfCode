@@ -60,7 +60,6 @@ def find_total_syntax_error_score(filename):
     corrupt_chars = []
 
     def note_if_corrupt(line):
-        seen: []
         brackets = []
         for i in range(0, len(line)):
             if line[i] in open_brackets:
