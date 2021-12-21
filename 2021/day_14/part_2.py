@@ -1,40 +1,53 @@
-from collections import defaultdict
+from collections import defaultdict, deque
 
 def expand_polymer(filename):
     with open(filename) as f:
         lines = [line.rstrip() for line in f.readlines()]
 
     polymer_template = lines[0]
-
+    letter_count = {}
     pair_insertion_rules = {}
+
     for line in lines[2:]:
         pair, letter = line.split(" -> ")
-        pair_insertion_rules[pair] = letter
-
-    def process_polymer(polymer, steps):
-        while steps > 0:
-            new_polymer = ""
-            last = polymer[-1]
-            print(polymer)
-            print(last)
-            for i in range(0, len(polymer) - 1):
-                pair = polymer[i: i + 2]
-                print(pair)
-                new_polymer += polymer[i] + pair_insertion_rules[pair]
-            new_polymer += last
-            print(new_polymer)
-            polymer = new_polymer
-            steps -= 1
-        return polymer
+        letter_count[letter] = 0
+        pair_insertion_rules[pair] = {
+            "value": letter, "children": [f"{pair[0] + letter}", f"{letter + pair[1]}"]
+        }
 
     print(pair_insertion_rules)
+    for char in polymer_template:
+        letter_count[char] += 1
 
-    polymer = process_polymer(polymer_template, 40)
+    print(letter_count)
 
-    letter_count = defaultdict(lambda: 0)
+    queued_nodes = deque()
 
-    for letter in polymer:
-        letter_count[letter] += 1
+    for i in range(0, len(polymer_template) - 1):
+                    pair = polymer_template[i: i + 2]
+                    print(pair)
+                    queued_nodes.append(pair)
+
+    print(queued_nodes)
+
+
+    time_to_depth_increase = len(queued_nodes)
+    depth = 0
+    pending_depth_increase = False
+
+    while depth < 40:
+        print(f"depth: {depth}")
+        node = pair_insertion_rules[queued_nodes.popleft()]
+        time_to_depth_increase -= 1
+        letter_count[node["value"]] += 1
+        if time_to_depth_increase == 0:
+            depth += 1
+            pending_depth_increase = True
+        for child in node["children"]:
+            queued_nodes.append(child)
+        if pending_depth_increase:
+            time_to_depth_increase = len(queued_nodes)
+            pending_depth_increase = False
 
     print(letter_count)
     highest = letter_count[max(letter_count, key=letter_count.get)]
@@ -45,4 +58,4 @@ def expand_polymer(filename):
     # print(polymer_template)
     # print(pair_insertion_rules)
 
-expand_polymer("data.txt")
+expand_polymer("sample_data.txt")
