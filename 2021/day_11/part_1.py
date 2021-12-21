@@ -303,7 +303,6 @@ def count_octopus_flashes_after_100_steps(filename):
     with open(filename) as f:
         grid = [[int(num) for num in line.rstrip()] for line in f.readlines()]
 
-
     flashes = 0
 
     def step_once(grid):
@@ -315,130 +314,64 @@ def count_octopus_flashes_after_100_steps(filename):
                     tens.append((point[0], point[1]))
         return tens
 
-    def process_tens(tens, grid, flashes):
-        while tens:
-            row, col = tens.popleft()
-            flashes += 1
-            grid[row][col] = 0
-            # increase each horizontally adjacent octopus
-            row_tens = increase_row(row, grid)
-            if row_tens:
-                tens.extend(row_tens)
-            
-            # increase each vertically adjacent octopus
-            col_tens = increase_column(col, grid)
-            if col_tens:
-                tens.extend(col_tens)
-
-            # increase each diagonally adjacent octopus
-            diag_tens = increase_diagonals(row, col, grid)
-            if diag_tens:
-                tens.extend(diag_tens)
-        return flashes
-
 
     def increase_point(row, col, grid):
         grid[row][col] += 1
         if grid[row][col] > 9:
             return (row, col)
 
-    def increase_row(row, grid):
+
+    def process_tens(tens, grid, flashes):
+        pp.pprint(grid)
+        print(f"process_tens; tens: {tens}")
+        while tens:
+            row, col = tens.popleft()
+            flashes += 1
+            grid[row][col] = 0
+            # increase each adjacent octopus
+            new_tens = increase_adjacent(row, col, grid)
+            if new_tens:
+                tens.extend(new_tens)
+
+        return flashes
+
+
+    def increase_adjacent(row, col, grid):
         tens = []
-        for col in range(0, len(grid[row])):
-            if grid[row][col] != 0:
-                grid[row][col] += 1
-                if grid[row][col] > 9:
-                    tens.append((row, col))
+        directions = ((-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1))
+        for d in directions:
+            if row + d[0] in range(0, len(grid)) and col + d[1] in range(0, len(grid[row])):
+                adj_row = row + d[0]
+                adj_col = col + d[1]
+                if grid[adj_row][adj_col] in range(1, 10):
+                    ten = increase_point(adj_row, adj_col, grid)
+                    if ten:
+                        tens.append(ten)
         return tens
 
-    def increase_column(col, grid):
-        tens = []
-        for row in range(0, len(grid)):
-            if grid[row][col] != 0:
-                grid[row][col] += 1
-                if grid[row][col] > 9:
-                    tens.append((row, col))
-        return tens
 
-    def increase_diagonals(starting_row, starting_col, grid):
-        tens = []
-        # down and to the right
-        if starting_row < starting_col: # 1, 7
-            row = 0
-            col = abs(starting_col - starting_row)
-            while col < len(grid[row]):
-                if grid[row][col] != 0:
-                    grid[row][col] += 1
-                    if grid[row][col] > 9:
-                        tens.append((row, col))
-                row += 1
-                col += 1
+    # print("step 0")
+    # pp.pprint(grid)
+    # tens = step_once(grid)
+    # print(f"tens: {tens}")
+    # flashes = process_tens(tens, grid, flashes)
+    # print("after step 1")
+    # pp.pprint(grid)
+    # tens = step_once(grid)
+    # print(f"tens: {tens}")
+    # flashes = process_tens(tens, grid, flashes)
+    # print("after step 2")
+    # pp.pprint(grid)
 
-        elif starting_col < starting_row:
-            col = 0
-            row = abs(starting_col - starting_row)
-            while row < len(grid):
-                if grid[row][col] != 0:
-                    grid[row][col] += 1
-                    if grid[row][col] > 9:
-                        tens.append((row, col))
-                row += 1
-                col += 1
+    steps = 100
 
-        else: # col == row
-            for i in range(0, len(grid)):
-                if grid[i][i] != 0:
-                    grid[i][i] += 1
-                    if grid[i][i] > 9:
-                        tens.append((i, i))
+    while steps > 0:
+        tens = step_once(grid)
+        flashes = process_tens(tens, grid, flashes)
+        steps -= 1
+        pp.pprint(grid)
 
-        # up and to the right
-        if starting_row + starting_col < len(grid[starting_col]) - 1:
-            col = 0
-            row = starting_row + starting_col
-            while row >= 0:
-                if grid[row][col] != 0:
-                    grid[row][col] += 1
-                    if grid[row][col] > 9:
-                        tens.append((row, col))
-                row -= 1
-                col += 1
-
-        elif starting_row + starting_col > len(grid[starting_col]) - 1:
-            row = len(grid) - 1
-            col = starting_row + starting_col - len(grid[starting_col]) - 1
-            while col < len(grid[row]) - 1:
-                if grid[row][col] != 0:
-                    grid[row][col] += 1
-                    if grid[row][col] > 9:
-                        tens.append((row, col))
-                row -= 1
-                col += 1
-
-        else: # row + col == len(grid[col] - 1)
-            row = len(grid) - 1
-            col = 0
-            while row >= 0:
-                if grid[row][col] != 0:
-                    grid[row][col] += 1
-                    if grid[row][col] > 9:
-                        tens.append((row, col))
-                row -= 1
-                col += 1
+    print(flashes)
 
 
-    print("step 0")
-    pp.pprint(grid)
-    tens = step_once(grid)
-    print(f"tens: {tens}")
-    flashes = process_tens(tens, grid, flashes)
-    print("after step 1")
-    pp.pprint(grid)
-    tens = step_once(grid)
-    print(f"tens: {tens}")
-    flashes = process_tens(tens, grid, flashes)
-    print("after step 2")
-    pp.pprint(grid)
-
-
-count_octopus_flashes_after_100_steps("sample_data.txt")
+count_octopus_flashes_after_100_steps("data.txt")
