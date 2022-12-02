@@ -38,7 +38,8 @@ In case the Elves get hungry and need extra snacks, they need to know which Elf 
 Find the Elf carrying the most Calories. How many total Calories is that Elf carrying?
 """
 
-def boilerplate(filename):
+
+def count_most_calories(filename):
     with open(filename) as f:
         max_calories = []
         current_calories = 0
@@ -53,4 +54,4 @@ def boilerplate(filename):
     print(max_calories)
     return max_calories
 
-boilerplate("data.txt")
+count_most_calories("data.txt")

@@ -47,7 +47,8 @@ In the example above, the top three Elves are the fourth Elf (with 24000 Calorie
 Find the top three Elves carrying the most Calories. How many Calories are those Elves carrying in total?
 """
 
-def boilerplate(filename):
+
+def count_highest_three_calorie_totals(filename):
     with open(filename) as f:
         max_calories = []
         current_calories = 0
@@ -63,4 +64,4 @@ def boilerplate(filename):
     print(sum(max_calories[-3:]))
     return sum(max_calories[-3:])
 
-boilerplate("data.txt")
+count_highest_three_calorie_totals("data.txt")
