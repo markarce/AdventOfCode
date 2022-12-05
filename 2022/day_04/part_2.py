@@ -53,21 +53,9 @@ So, in this example, the number of overlapping assignment pairs is 4.
 
 In how many assignment pairs do the ranges overlap?
 """
+from itertools import accumulate
 
 def find_overlapping_assignment_pairs(filename):
     with open(filename) as f:
-        lines = [line.rstrip() for line in f.readlines() if len(line) > 1]
-
-    overlapping_assignments = 0
-    print(lines)
-    for line in lines:
-        r1, r2 = line.split(",")
-        start1, end1 = r1.split("-")
-        start2, end2 = r2.split("-")
-        set_1 = set(range(int(start1), int(end1) + 1, 1))
-        set_2 = set(range(int(start2), int(end2) + 1, 1))
-        overlapping_assignments += int(bool(set_1 & set_2))
-
-    print(overlapping_assignments)
-
+        print(list(accumulate(map(lambda y: int(bool(set.intersection(*map(lambda x: set(range(int(x.split("-")[0]), int(x.split("-")[1]) + 1)), y.split(","))))), [line.rstrip() for line in f.readlines()])))[-1])
 find_overlapping_assignment_pairs("data.txt")
