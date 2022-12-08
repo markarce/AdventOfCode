@@ -10,12 +10,10 @@ def find_top_crates(filename):
     for i in range(1, 10):
         stacks[i] = []
     columns = [1 + i * 4 for i in range(9)]
-    print(f"columns: {columns}")
     for line in lines[:9]:
         for i in range(len(columns)):
             if line[columns[i]].isupper():
                 stacks[i + 1].insert(0, line[columns[i]])
-    print(stacks)
     # start after instructions begin on line 11
     for instruction in lines[10:]:
         moves, source, destination = [int(num) for num in re.findall(r'\d+', instruction)]
