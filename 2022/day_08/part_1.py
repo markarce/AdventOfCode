@@ -10,7 +10,7 @@ def boilerplate(filename):
         tree = lines[j][i]
         while i > 0:
             next_position = lines[j][i-1]
-            if tree[0] <= next_position[0]:
+            if tree <= next_position:
                 return False
             i -= 1
         return True
@@ -19,7 +19,7 @@ def boilerplate(filename):
         tree = lines[j][i]
         while i < len(lines) - 1:
             next_position = lines[j][i+1]
-            if tree[0] <= next_position[0]:
+            if tree <= next_position:
                 return False
             i += 1
         return True
@@ -28,7 +28,7 @@ def boilerplate(filename):
         tree = lines[j][i]
         while j > 0:
             next_position = lines[j-1][i]
-            if tree[0] <= next_position[0]:
+            if tree <= next_position:
                 return False
             j -= 1
         return True
@@ -37,14 +37,13 @@ def boilerplate(filename):
         tree = lines[j][i]
         while j < len(lines[i]) - 1:
             next_position = lines[j+1][i]
-            if tree[0] <= next_position[0]:
+            if tree <= next_position:
                 return False
             j += 1
         return True
 
     for i in range(len(lines)):
         for j in range(len(lines[i])):
-            lines[j][i] = [lines[j][i], 0]
             if any([
                 is_visible_top(lines, j, i),
                 is_visible_bottom(lines, j, i),
